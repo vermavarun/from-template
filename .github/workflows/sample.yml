@@ -1,0 +1,17 @@
+name: Shell Commands Again
+
+on: [push]
+env:
+  DEPLOY_RELEASE_TO_AZURE: 'false'
+
+jobs:
+    run-shell-command-again:
+      runs-on: ubuntu-latest
+      steps:
+      - name: echo a string
+        run: echo "Hello World"
+      - name: Sleep for 3 seconds
+        if: env.DEPLOY_RELEASE_TO_AZURE == 'true'
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '3s'

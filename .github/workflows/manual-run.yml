@@ -1,0 +1,15 @@
+name: Print environment variable
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-tag:
+        type: string
+        required: true
+
+jobs:    
+  print-input:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print value
+        run: echo ${{ github.event.inputs.release-tag }}

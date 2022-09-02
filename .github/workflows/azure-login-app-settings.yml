@@ -1,0 +1,28 @@
+name: GitHub Actions Login
+on: [push]
+jobs:
+  Explore-GitHub-Login:
+    runs-on: ubuntu-latest
+    steps:
+        
+      - name: Setup Azure SPN Certificate file inside the runner
+        env:
+          CERT: ${{ secrets.SPN }}
+        run: |
+          echo "$CERT" > file.pem      
+      - name: Login to Azure
+        run: |
+          az login --service-principal -u 9841977a-6276-4fa0-a65d-bb0a9de5816f -p file.pem --tenant db1e96a8-a3da-442a-930b-235cac24cd5c
+
+      - uses: azure/appservice-settings@v1
+        with:
+          app-name: 'skillathon2022api'
+          #slot-name: 'staging'  # Optional and needed only if the settings have to be configured on the specific deployment slot
+          app-settings-json: '${{ secrets.APP_SETTINGS }}'
+          connection-strings-json: '${{ secrets.CONNECTION_STRINGS }}'
+          general-settings-json: '{"alwaysOn": "false", "webSocketsEnabled": "true"}' #'General configuration settings as Key Value pairs'
+        id: settings 
+
+      - name: logout
+        run: |
+          az logout 

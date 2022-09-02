@@ -1,0 +1,21 @@
+name: on Repo Create
+
+on: 
+  create
+
+jobs:
+    run-shell-command-again:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Replace Name
+        shell: pwsh
+        run: |
+          .\rename-files.ps1 Template-Client-React-Native ${{ github.event.repository.name }}
+      - name: Git Commit Name Changes
+        run: |
+          git config --global user.name 'Varun Verma'
+          git config --global user.email 'vermavarun@outlook.com'
+          git commit -am "Automated Name Replace"
+          git push
